@@ -8,3 +8,7 @@ poster.
 The source is LaTeX, using beamer.  I included the PDF and PostScript
 for those who just want to have them printed at their favorite print
 shop.
+
+I'd like to acknowledge the ISO C++ standards committee and working
+groups.  And also [cppreference.com](https://cppreference.com) for
+providing a fantastic resource for C++ developers.

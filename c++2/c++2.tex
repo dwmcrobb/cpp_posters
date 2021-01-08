@@ -1,0 +1,429 @@
+\documentclass[xcolor=table,xcdraw]{beamer}
+%% \usetheme{AnnArbor}
+\usepackage{colortbl, hhline}
+\usepackage[orientation=landscape, size=a0, scale=0.85,margin=0in]{beamerposter}
+\setlength{\paperwidth}{48in}
+\setlength{\paperheight}{36in}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{boldline}
+\usepackage{booktabs}
+\usepackage{epsfig}
+\usepackage{etoolbox}
+\usepackage{fix-cm}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[scaled=1.03]{zi4}
+\usepackage[latin1]{inputenc}
+\usepackage{longtable}
+\usepackage{makecell}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{tabu}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+% after package colortbl is loaded
+\makeatletter
+\patchcmd\@cline
+  {\arrayrulewidth\hfill}% search
+  {\arrayrulewidth\hfill\kern\z@}% replace
+  {}% success
+  {\errmessage{Patching \string\@cline\space failed}}% failure
+\makeatother
+
+\makeatletter
+\let\zz\reset@color
+\def\reset@color{\kern\z@\zz}
+\makeatother
+
+\def\myraggedright{%
+  \rightskip=0pt plus 1fil
+  \spaceskip .3333em \xspaceskip .5em\relax
+}
+
+\makeatletter
+\newcommand\HUGE{\@setfontsize\Huge{108}{120}}
+\newcommand\HUGEB{\@setfontsize\Huge{60}{70}}
+\newcommand\LARGEB{\@setfontsize\Huge{40}{48}}
+\makeatother
+
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{1cm}
+
+\definecolor{DodgerBlue}{RGB}{30,144,255}
+\definecolor{LeoniBlue}{RGB}{33,67,149}
+\definecolor{LeoniBlue2}{RGB}{50,101,224}
+\definecolor{LightGray}{RGB}{240,240,240}
+\definecolor{cpp03}{RGB}{0,0,0}
+\definecolor{cpp11}{RGB}{0,0,255}
+\definecolor{cpp17}{RGB}{0,160,0}
+\definecolor{yes}{RGB}{192,255,192}
+\definecolor{no}{RGB}{255,176,176}
+\definecolor{maybe}{RGB}{255,255,160}
+\definecolor{DarkGreen}{RGB}{0,160,0}
+\definecolor{DarkRed}{RGB}{160,0,0}
+% \definecolor{wheat}{RGB}{255,232,189}
+\definecolor{wheat}{RGB}{255,255,255}
+% \definecolor{whd}{RGB}{238,216,174}
+\definecolor{whd}{RGB}{255,255,204}
+\definecolor{conceptbg}{RGB}{200,255,255}
+\setbeamercolor*{block body}{bg=white,fg=LeoniBlue}
+\setbeamercolor*{block title}{bg=LeoniBlue,fg=white}
+\makeatletter
+\def\verbatim@font{\linespread{0.5}\normalfont\ttfamily}
+\makeatother
+\makeatletter
+
+% \baselineskip=0pt
+
+\newtoggle{paper}
+% set to true when creating PostScript for poster, false when creaitng PDF
+\toggletrue{paper}
+% \togglefalse{paper}
+\iftoggle {paper} { \hypersetup{colorlinks=false} } { \hypersetup{urlcolor=blue,linkcolor=blue,colorlinks=true} }
+
+\newcommand\code[1]{\texttt{\bfseries{#1}}}
+\newcommand\cppc[3]{\multicolumn{1}{c#3}{\ifstrequal{#1}{03}{\textcolor{cpp03}}
+    {\ifstrequal{#1}{11}{\textcolor{cpp11}}
+      {\ifstrequal{#1}{17}{\textcolor{cpp17}}
+        {\textcolor{black}}}}{\code{#2}}}}
+\newcommand\ccpp[2]{\cppc{#1}{#2}{}}
+\newcommand\dccpp[2]{\cppc{#1}{#2}{||}}
+
+\newcommand\cppw[3]{\multicolumn{1}{c#3}{\cellcolor{wheat}\ifstrequal{#1}{03}{\textcolor{cpp03}}
+    {\ifstrequal{#1}{11}{\textcolor{cpp11}}
+      {\ifstrequal{#1}{17}{\textcolor{cpp17}}
+        {\textcolor{black}}}}{\code{#2}}}}
+\newcommand\cppdw[3]{\multicolumn{1}{c#3}{\cellcolor{whd}\ifstrequal{#1}{03}{\textcolor{cpp03}}
+    {\ifstrequal{#1}{11}{\textcolor{cpp11}}
+      {\ifstrequal{#1}{17}{\textcolor{cpp17}}
+        {\textcolor{black}}}}{\code{#2}}}}
+\newcommand\ccpw[2]{\cppw{#1}{#2}{}}
+\newcommand\dccpw[2]{\cppw{#1}{#2}{||}}
+\newcommand\ccpwd[2]{\cppdw{#1}{#2}{}}
+\newcommand\dccpwd[2]{\cppdw{#1}{#2}{||}}
+
+\newcommand\mbrtcell[2]{\textcolor{#1}{\bfseries{#2}}}
+\newcommand\cppss[1]{\textcolor{DarkGreen}{$^{\mathsf{C++#1}}$}}
+\newcommand\tccell[1]{\cellcolor{DodgerBlue}\mywt{\bfseries{#1}}}
+\newcommand\invt[2]{
+  \ifstrequal{#1}{maybe}{\cellcolor{maybe}{\large{\bfseries{#2}}}}
+    {\ifstrequal{#1}{no}{\cellcolor{no}{\large{\bfseries{#2}}}}
+      {\ifstrequal{#1}{yes}{\cellcolor{yes}{\large{\bfseries{#2}}}}
+        {\cellcolor{white}{\large{\bfseries{#2}}}}}}}
+      
+\newcommand\lblue[1]{\textcolor{LeoniBlue}{#1}}
+\newcommand\mttitle[1]{\cellcolor{LeoniBlue}\HUGEB{\textcolor{white}{#1}}}
+\newcommand\mycy[1]{\textcolor{conceptbg}{#1}}
+\newcommand\mycycell[1]{\celllcolor{cyan}{#1}}
+\newcommand\myss[1]{\textcolor{DarkGreen}{$^{\mathsf{#1}}$}}
+\newcommand\myssno[1]{\textcolor{DarkRed}{$^{\mathsf{#1}}$}}
+% \newcommand\mytilde[0]{\raise.17ex\hbox{$\scriptstyle\sim$}}
+% \newcommand\mytilde[0]{\raise.17ex\hbox{$\textstyle\sim$}}
+\newcommand\mytilde[0]{\lower.17ex\hbox{\textasciitilde{}}}
+\newcommand\mywt[1]{\textcolor{white}{#1}}
+\newcommand\myyw[1]{\textcolor{yellow}{#1}}
+\newcommand\mytblt[1]{\textcolor{LeoniBlue}{\textbf{\Large{#1}}}}
+\newcommand{\myparbox}[2]{%
+  \parbox[t]{#1}{\linespread{0.7}\normalfont\raggedright#2\par
+  \vspace{-\prevdepth} % remove the depth of the last line
+  \vspace{0.5em} % add a fixed vertical space
+  }%
+}
+
+\newcommand\nocell[0]{\cellcolor{LeoniBlue}}
+\newcommand{\ctparbox}[2]{%
+  \parbox[t]{#1}{\linespread{0.7}\normalfont\begin{center}#2\end{center}\par
+  \vspace{-\prevdepth} % remove the depth of the last line
+  \vspace{0.5em} % add a fixed vertical space
+  }%
+}
+
+\setbeamercolor{background canvas}{bg=LeoniBlue,fg=white}
+\setbeamercolor{postit}{fg=LeoniBlue,bg=wheat}
+\setbeamercolor{dodger}{fg=LeoniBlue,bg=DodgerBlue}
+\setbeamercolor{leoni}{fg=LeoniBlue,bg=white}
+\setbeamercolor{concept}{fg=LeoniBlue,bg=conceptbg}
+\setbeamercolor{lb}{fg=white,bg=LeoniBlue}
+
+\setlength\tabcolsep{1.05em}
+
+\begin{document}
+
+\begin{textblock}{121.9}(0,4.0)
+  \begin{center}
+    \mywt{\HUGE{\bfseries{C++ STL container members and iterators}}}
+  \end{center}
+\end{textblock}
+
+\setlength{\arrayrulewidth}{2pt}
+\begin{textblock}{108.6}(5.2,8.4)
+    \arrayrulecolor{LeoniBlue}
+    \renewcommand{\arraystretch}{1.03}%
+    \begin{tabular*}{\linewidth}{||>{\columncolor{DodgerBlue}}cc||ccccc||cccc||cccc||ccc||}
+%      \multicolumn{18}{c}{\mttitle{C++ STL container member functions}} \\ \hhline{~~|t:=====:t:====:t:====:t:===:t|}
+      \multicolumn{2}{c||}{} & \multicolumn{5}{c||}{\tccell{\large{Sequence containers}}} & \multicolumn{4}{c||}{\tccell{\large{Associative containers}}} & \multicolumn{4}{c||}{\tccell{\large{Unordered associative containers}}} & \multicolumn{3}{c||}{\tccell{\large{Container adaptors}}} \\   \hhline{|t:==::=====::====::====::===:|}
+      \rowcolor{white}
+      \multicolumn{2}{||r||}{\cellcolor{DodgerBlue}\textcolor{white}{\bfseries{Header $\longrightarrow$}}} & \ccpp{03}{\href{http://en.cppreference.com/w/cpp/header/array}{$<$array$>$}} & \ccpwd{03}{\href{http://en.cppreference.com/w/cpp/header/vector}{$<$vector$>$}} & \ccpp{03}{\href{http://en.cppreference.com/w/cpp/header/deque}{$<$deque$>$}} & \ccpwd{03}{\href{http://en.cppreference.com/w/cpp/header/forward_list}{$<$forward\_list$>$}} & \dccpp{03}{\href{http://en.cppreference.com/w/cpp/header/list}{$<$list$>$}} & \multicolumn{2}{c}{\cellcolor{whd}\href{http://en.cppreference.com/w/cpp/header/set}{\code{$<$set$>$}}} & \multicolumn{2}{c||}{\cellcolor{white}\href{http://en.cppreference.com/w/cpp/header/map}{\code{$<$map$>$}}} & \multicolumn{2}{c}{\cellcolor{whd}\href{http://en.cppreference.com/w/cpp/header/unordered_set}{\code{$<$unordered\_set$>$}}} & \multicolumn{2}{c||}{\cellcolor{white}\href{http://en.cppreference.com/w/cpp/header/unordered_map}{\code{$<$unordered\_map$>$}}} & \cellcolor{whd}\href{http://en.cppreference.com/w/cpp/header/stack}{\code{$<$stack$>$}} & \multicolumn{2}{c||}{\cellcolor{white}\href{http://en.cppreference.com/w/cpp/header/queue}{\code{$<$queue$>$}}} \\ \hhline{||-|-||-|-|-|-|-||-|-|-|-||-|-|-||}
+      \rowcolor{white}
+      \multicolumn{2}{||r||}{\cellcolor{DodgerBlue}\textcolor{white}{\bfseries{Container $\longrightarrow$}}} & \href{http://en.cppreference.com/w/cpp/container/array}{\textcolor{cpp11}{\bfseries{array}}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/vector}{\bfseries{vector}} & \href{http://en.cppreference.com/w/cpp/container/deque}{\bfseries{deque}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/forward_list}{\textcolor{cpp11}{\bfseries{forward\_list}}} & \href{http://en.cppreference.com/w/cpp/container/list}{\bfseries{list}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/set}{\bfseries{set}} & \href{http://en.cppreference.com/w/cpp/container/multiset}{\bfseries{multiset}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/map}{\bfseries{map}} & \multicolumn{1}{c||}{\href{http://en.cppreference.com/w/cpp/container/multimap}{\bfseries{multimap}}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/unordered_set}{\textcolor{cpp11}{\bfseries{unordered\_set}}} & \href{http://en.cppreference.com/w/cpp/container/unordered_multiset}{\textcolor{cpp11}{\bfseries{unordered\_multiset}}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/unordered_map}{\textcolor{cpp11}{\bfseries{unordered\_map}}} & \multicolumn{1}{c||}{\href{http://en.cppreference.com/w/cpp/container/unordered_multimap}{\textcolor{cpp11}{\bfseries{unordered\_multimap}}}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/stack}{\bfseries{stack}} & \href{http://en.cppreference.com/w/cpp/container/queue}{\bfseries{queue}} & \cellcolor{wheat}\href{http://en.cppreference.com/w/cpp/container/priority_queue}{\bfseries{priority\_queue}} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{(constructor)}} & \textcolor{cpp11}{(implicit)} & \ccpwd{03}{\href{http://en.cppreference.com/w/cpp/container/vector/vector}{vector}} & \ccpp{03}{\href{http://en.cppreference.com/w/cpp/container/deque/deque}{deque}} & \ccpwd{11}{\href{http://en.cppreference.com/w/cpp/container/forward_list/forward_list}{forward\_list}} & \dccpp{03}{\href{http://en.cppreference.com/w/cpp/container/list/list}{list}} & \ccpwd{03}{\href{http://en.cppreference.com/w/cpp/container/set/set}{set}} & \ccpp{03}{\href{http://en.cppreference.com/w/cpp/container/multiset/multiset}{multiset}} & \ccpwd{03}{\href{http://en.cppreference.com/w/cpp/container/map/map}{map}} & \dccpp{03}{\href{http://en.cppreference.com/w/cpp/container/multimap/multimap}{multimap}} & \ccpwd{11}{\href{http://en.cppreference.com/w/cpp/container/unordered_set/unordered_set}{unordered\_set}} & \ccpp{11}{\href{http://en.cppreference.com/w/cpp/container/unordered_multiset/unordered_multiset}{unordered\_multiset}} & \ccpwd{11}{\href{http://en.cppreference.com/w/cpp/container/unordered_map/unordered_map}{unordered\_map}} & \dccpp{11}{\href{http://en.cppreference.com/w/cpp/container/unordered_multimap/unordered_multimap}{unordered\_multimap}} & \ccpwd{03}{\href{http://en.cppreference.com/w/cpp/container/stack/stack}{stack}} & \ccpp{03}{\href{http://en.cppreference.com/w/cpp/container/queue/queue}{queue}} & \dccpwd{03}{\href{http://en.cppreference.com/w/cpp/container/priority_queue/priority_queue}{priority\_queue}} \\ \hhline{|~~||~~~~~||~~~~||~~~~|~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{(destructor)}} & \textcolor{cpp11}{(implicit)} & \ccpw{03}{\mytilde vector} & \ccpp{03}{\mytilde deque} & \ccpw{11}{\mytilde forward\_list} & \dccpp{03}{\mytilde list} & \ccpw{03}{\mytilde set} & \ccpp{03}{\mytilde multiset} & \ccpw{03}{\mytilde map} & \dccpp{03}{\mytilde multimap} & \ccpw{11}{\mytilde unordered\_set} & \ccpp{11}{\mytilde unordered\_multiset} & \ccpw{11}{\mytilde unordered\_map} & \dccpp{11}{\mytilde unordered\_multimap} & \ccpw{03}{\mytilde stack} & \ccpp{03}{\mytilde queue} & \dccpw{03}{\mytilde priority\_queue} \\ \hhline{|~~||~~~~~||~~~~||~~~~|~~~||}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{operator=}} & \textcolor{cpp11}{(implicit)} & \ccpwd{03}{operator=} & \ccpp{03}{operator=} & \ccpwd{11}{operator=} & \dccpp{03}{operator=} & \ccpwd{03}{operator=} & \ccpp{03}{operator=} & \ccpwd{03}{operator=} & \dccpp{03}{operator=} & \ccpwd{11}{operator=} & \ccpp{11}{operator=} & \ccpwd{11}{operator=} & \dccpp{11}{operator=} & \ccpwd{03}{operator=} & \ccpp{03}{operator=} & \dccpwd{03}{operator=} \\ \hhline{|~~||~~~~~||~~~~||~~~~|~~~||}
+      \rowcolor{white}
+      \multirow{-4}{*}{\tccell{\parbox{3.5cm}{\begin{center}Construct,\linebreak destruct,\linebreak assign \end{center}}}} & \mbrtcell{black}{\code{assign}} & \ccpp{}{} & \ccpw{03}{assign} & \ccpp{03}{assign} & \ccpw{11}{assign} & \dccpp{03}{assign} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{begin}} & \ccpp{11}{begin} & \ccpwd{03}{begin} & \ccpp{03}{begin} & \ccpwd{11}{begin} & \dccpp{03}{begin} & \ccpwd{03}{begin} & \ccpp{03}{begin} & \ccpwd{03}{begin} & \dccpp{03}{begin} & \ccpwd{11}{begin} & \ccpp{11}{begin} & \ccpwd{11}{begin} & \dccpp{11}{begin} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp11}{\code{cbegin}} & \ccpp{11}{cbegin} & \ccpw{11}{cbegin} & \ccpp{11}{cbegin} & \ccpw{11}{cbegin} & \dccpp{11}{cbegin} & \ccpw{11}{cbegin} & \ccpp{11}{cbegin} & \ccpw{11}{cbegin} & \dccpp{11}{cbegin} & \ccpw{11}{cbegin} & \ccpp{11}{cbegin} & \ccpw{11}{cbegin} & \dccpp{11}{cbegin} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{end}} & \ccpp{11}{end} & \ccpwd{03}{end} & \ccpp{03}{end} & \ccpwd{11}{end} & \dccpp{03}{end} & \ccpwd{03}{end} & \ccpp{03}{end} & \ccpwd{03}{end} & \dccpp{03}{end} & \ccpwd{11}{end} & \ccpp{11}{end} & \ccpwd{11}{end} & \dccpp{11}{end} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp11}{\code{cend}} & \ccpp{11}{cend} & \ccpw{11}{cend} & \ccpp{11}{cend} & \ccpw{11}{cend} & \dccpp{11}{cend} & \ccpw{11}{cend} & \ccpp{11}{cend} & \ccpw{11}{cend} & \dccpp{11}{cend} & \ccpw{11}{cend} & \ccpp{11}{cend} & \ccpw{11}{cend} & \dccpp{11}{cend} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{rbegin}} & \ccpp{11}{rbegin} & \ccpwd{03}{rbegin} & \ccpp{03}{rbegin} & \ccpwd{}{} & \dccpp{03}{rbegin} & \ccpwd{03}{rbegin} & \ccpp{03}{rbegin} & \ccpwd{03}{rbegin} & \dccpp{03}{rbegin} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp11}{\code{crbegin}} & \ccpp{11}{crbegin} & \ccpw{11}{crbegin} & \ccpp{11}{crbegin} & \ccpw{}{} & \dccpp{11}{crbegin} & \ccpw{11}{crbegin} & \ccpp{11}{crbegin} & \ccpw{11}{crbegin} & \dccpp{11}{crbegin} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{rend}} & \ccpp{11}{rend} & \ccpwd{03}{rend} & \ccpp{03}{rend} & \ccpwd{}{} & \dccpp{03}{rend} & \ccpwd{03}{rend} & \ccpp{03}{rend} & \ccpwd{03}{rend} & \dccpp{03}{rend} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \multirow{-8}{*}{\tccell{Iterators}} & \mbrtcell{cpp11}{\code{crend}} & \ccpp{11}{crend} & \ccpw{11}{crend} & \ccpp{11}{crend} & \ccpw{}{} & \dccpp{11}{crend} & \ccpw{11}{crend} & \ccpp{11}{crend} & \ccpw{11}{crend} & \dccpp{11}{crend} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{at}} & \ccpp{11}{at} & \ccpwd{03}{at} & \ccpp{03}{at} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{11}{at} & \dccpp{}{} & \ccpwd{}{} & \ccpp{11}{at} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{operator[]}} & \ccpp{11}{operator[]} & \ccpw{03}{operator[]} & \ccpp{03}{operator[]} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{03}{operator[]} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{11}{operator[]} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{data}} & \ccpp{11}{data} & \ccpwd{03}{data} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{front}} & \ccpp{11}{front} & \ccpw{03}{front} & \ccpp{03}{front} & \ccpw{11}{front} & \dccpp{03}{front} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{03}{front} & \dccpw{03}{top} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{LightGray}
+      \multirow{-5}{*}{\tccell{\parbox{3cm}{\begin{center}Element access\end{center}}}} & \mbrtcell{black}{\code{back}} & \ccpp{11}{back} & \ccpwd{03}{back} & \ccpp{03}{back} & \ccpwd{}{} & \dccpp{03}{back} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{03}{top} & \ccpp{03}{back} & \dccpwd{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{empty}} & \ccpp{11}{empty} & \ccpw{03}{empty} & \ccpp{03}{empty} & \ccpw{11}{empty} & \dccpp{03}{empty} & \ccpw{03}{empty} & \ccpp{03}{empty} & \ccpw{03}{empty} & \dccpp{03}{empty} & \ccpw{11}{empty} & \ccpp{11}{empty} & \ccpw{11}{empty} & \dccpp{11}{empty} & \ccpw{03}{empty} & \ccpp{03}{empty} & \dccpw{03}{empty} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{size}} & \ccpp{11}{size} & \ccpwd{03}{size} & \ccpp{03}{size} & \ccpwd{}{} & \dccpp{03}{size} & \ccpwd{03}{size} & \ccpp{03}{size} & \ccpwd{03}{size} & \dccpp{03}{size} & \ccpwd{11}{size} & \ccpp{11}{size} & \ccpwd{11}{size} & \dccpp{11}{size} & \ccpwd{03}{size} & \ccpp{03}{size} & \dccpwd{03}{size} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{max\_size}} & \ccpp{11}{max\_size} & \ccpw{03}{max\_size} & \ccpp{03}{max\_size} & \ccpw{11}{max\_size} & \dccpp{03}{max\_size} & \ccpw{03}{max\_size} & \ccpp{03}{max\_size} & \ccpw{03}{max\_size} & \dccpp{03}{max\_size} & \ccpw{11}{max\_size} & \ccpp{11}{max\_size} & \ccpw{11}{max\_size} & \dccpp{11}{max\_size} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{resize}} & \ccpp{}{} & \ccpwd{03}{resize} & \ccpp{03}{resize} & \ccpwd{11}{resize} & \dccpp{03}{resize} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\\hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{capacity}} & \ccpp{}{} & \ccpw{03}{capacity} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{11}{bucket\_count} & \ccpp{11}{bucket\_count} & \ccpw{11}{bucket\_count} & \dccpp{11}{bucket\_count} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{reserve}} & \ccpp{}{} & \ccpwd{03}{reserve} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{11}{reserve} & \ccpp{11}{reserve} & \ccpwd{11}{reserve} & \dccpp{11}{reserve} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{||~~||~~~~~||~~~~||~~~~||~~~||}
+      \rowcolor{white}
+      \multirow{-7}{*}{\cellcolor{DodgerBlue}\textcolor{white}{\bfseries{Capacity}}} & \mbrtcell{black}{\code{shrink\_to\_fit}} & \ccpp{}{} & \ccpw{11}{shrink\_to\_fit} & \ccpp{11}{shrink\_to\_fit} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{clear}} & \ccpp{}{} & \ccpwd{03}{clear} & \ccpp{03}{clear} & \ccpwd{11}{clear} & \dccpp{03}{clear} & \ccpwd{03}{clear} & \ccpp{03}{clear} & \ccpwd{03}{clear} & \dccpp{03}{clear} & \ccpwd{11}{clear} & \ccpp{11}{clear} & \ccpwd{11}{clear} & \dccpp{11}{clear} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{insert}} & \ccpp{}{} & \ccpw{03}{insert} & \ccpp{03}{insert} & \ccpw{11}{insert\_after} & \dccpp{03}{insert} & \ccpw{03}{insert} & \ccpp{03}{insert} & \ccpw{03}{insert} & \dccpp{03}{insert} & \ccpw{11}{insert} & \ccpp{11}{insert} & \ccpw{11}{insert} & \dccpp{11}{insert} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp17}{\code{insert\_or\_assign}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{17}{insert\_or\_assign} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{17}{insert\_or\_assign} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp11}{\code{emplace}} & \ccpp{}{} & \ccpw{11}{emplace} & \ccpp{11}{emplace\_after} & \ccpw{}{} & \dccpp{11}{emplace} & \ccpw{11}{emplace} & \ccpp{11}{emplace} & \ccpw{11}{emplace} & \dccpp{11}{emplace} & \ccpw{11}{emplace} & \ccpp{11}{emplace} & \ccpw{11}{emplace} & \dccpp{11}{emplace} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp11}{\code{emplace\_hint}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{11}{emplace\_hint} & \ccpp{11}{emplace\_hint} & \ccpwd{11}{emplace\_hint} & \dccpp{11}{emplace\_hint} & \ccpwd{11}{emplace\_hint} & \ccpp{11}{emplace\_hint} & \ccpwd{11}{emplace\_hint} & \dccpp{11}{emplace\_hint} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp17}{\code{try\_emplace}} & \ccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{17}{try\_emplace} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{17}{try\_emplace} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{erase}} & \ccpp{}{} & \ccpwd{03}{erase} & \ccpp{03}{erase} & \ccpwd{11}{erase\_after} & \dccpp{03}{erase} & \ccpwd{03}{erase} & \ccpp{03}{erase} & \ccpwd{03}{erase} & \dccpp{03}{erase} & \ccpwd{11}{erase} & \ccpp{11}{erase} & \ccpwd{11}{erase} & \dccpp{11}{erase} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{push\_front}} & \ccpp{}{} & \ccpw{03}{push\_front} & \ccpp{03}{push\_front} & \ccpw{11}{push\_front} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp11}{\code{emplace\_front}} & \ccpp{}{} & \ccpwd{11}{emplace\_front} & \ccpp{11}{emplace\_front} & \ccpwd{11}{emplace\_front} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{pop\_front}} & \ccpp{}{} & \ccpw{03}{pop\_front} & \ccpp{03}{pop\_front} & \ccpw{11}{pop\_front} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{03}{pop} & \dccpw{03}{pop} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{push\_back}} & \ccpp{}{} & \ccpwd{03}{push\_back} & \ccpp{03}{push\_back} & \ccpwd{}{} & \dccpp{03}{push\_back} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{03}{push} & \ccpp{03}{push} & \dccpwd{03}{push} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{cpp11}{\code{emplace\_back}} & \ccpp{}{} & \ccpw{11}{emplace\_back} & \ccpp{11}{emplace\_back} & \ccpw{}{} & \dccpp{11}{emplace\_back} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{11}{emplace} & \ccpp{11}{emplace} & \dccpw{11}{emplace} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{pop\_back}} & \ccpp{}{} & \ccpwd{03}{pop\_back} & \ccpp{03}{pop\_back} & \ccpwd{}{} & \dccpp{03}{pop\_back} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{03}{pop} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{swap}} & \ccpp{11}{swap} & \ccpw{03}{swap} & \ccpp{03}{swap} & \ccpw{11}{swap} & \dccpp{03}{swap} & \ccpw{03}{swap} & \ccpp{03}{swap} & \ccpw{03}{swap} & \dccpp{03}{swap} & \ccpw{11}{swap} & \ccpp{11}{swap} & \ccpw{11}{swap} & \dccpp{11}{swap} & \ccpw{11}{swap} & \ccpp{11}{swap} & \dccpw{11}{swap} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{merge}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{11}{merge} & \dccpp{03}{merge} & \ccpwd{17}{merge} & \ccpp{17}{merge} & \ccpwd{17}{merge} & \dccpp{17}{merge} & \ccpwd{17}{merge} & \ccpp{17}{merge} & \ccpwd{17}{merge} & \dccpp{17}{merge} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \multirow{-16}{*}{\bfseries{\cellcolor{DodgerBlue}\textcolor{white}{Modifiers}}} & \mbrtcell{cpp17}{\code{extract}} & \ccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{17}{extract} & \ccpp{17}{extract} & \ccpw{17}{extract} & \dccpp{17}{extract} & \ccpw{17}{extract} & \ccpp{17}{extract} & \ccpw{17}{extract} & \dccpp{17}{extract} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{splice}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{03}{splice\_after} & \ccpwd{11}{splice} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{remove}} & \ccpp{}{} & \ccpw{}{} & \ccpp{03}{remove} & \ccpw{11}{remove} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{remove\_if}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{03}{remove\_if} & \ccpwd{11}{remove\_if} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{reverse}} & \ccpp{}{} & \ccpw{}{} & \ccpp{03}{reverse} & \ccpw{11}{reverse} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{unique}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{03}{unique} & \ccpwd{11}{unique} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \multirow{-6}{*}{\parbox{3.5cm}{\bfseries{\cellcolor{DodgerBlue}\textcolor{white}{\begin{center}List\linebreak operations\end{center}}}}} & \mbrtcell{black}{\code{sort}} & \ccpp{}{} & \ccpw{}{} & \ccpp{03}{sort} & \ccpw{11}{sort} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{count}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{03}{count} & \ccpp{03}{count} & \ccpwd{03}{count} & \dccpp{03}{count} & \ccpwd{11}{count} & \ccpp{11}{count} & \ccpwd{11}{count} & \dccpp{11}{count} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{find}} & \ccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{03}{find} & \ccpp{03}{find} & \ccpw{03}{find} & \dccpp{03}{find} & \ccpw{11}{find} & \ccpp{11}{find} & \ccpw{11}{find} & \dccpp{11}{find} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{lower\_bound}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{03}{lower\_bound} & \ccpp{03}{lower\_bound} & \ccpwd{03}{lower\_bound} & \dccpp{03}{lower\_bound} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{upper\_bound}} & \ccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{03}{upper\_bound} & \ccpp{03}{upper\_bound} & \ccpw{03}{upper\_bound} & \dccpp{03}{upper\_bound} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \multirow{-5}{*}{\cellcolor{DodgerBlue}\bfseries{\textcolor{white}{Lookup}}} & \mbrtcell{black}{\code{equal\_range}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{03}{equal\_range} & \ccpp{03}{equal\_range} & \ccpwd{03}{equal\_range} & \dccpp{03}{equal\_range} & \ccpwd{11}{equal\_range} & \ccpp{11}{equal\_range} & \ccpwd{11}{equal\_range} & \dccpp{11}{equal\_range} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{key\_comp}} & \ccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{03}{key\_comp} & \ccpp{03}{key\_comp} & \ccpw{03}{key\_comp} & \dccpp{03}{key\_comp} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{value\_comp}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{03}{value\_comp} & \ccpp{03}{value\_comp} & \ccpwd{03}{value\_comp} & \dccpp{03}{value\_comp} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\
+      \rowcolor{white}
+      \cellcolor{DodgerBlue} & \mbrtcell{black}{\code{hash\_function}} & \ccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{}{} & \ccpp{}{} & \ccpw{}{} & \dccpp{}{} & \ccpw{11}{hash\_function} & \ccpp{11}{hash\_function} & \ccpw{11}{hash\_function} & \dccpp{11}{hash\_function} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\
+      \rowcolor{LightGray}
+      \multirow{-4}{*}{\cellcolor{DodgerBlue}\bfseries{\textcolor{white}{Observers}}} & \mbrtcell{black}{\code{key\_eq}} & \ccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{}{} & \ccpp{}{} & \ccpwd{}{} & \dccpp{}{} & \ccpwd{11}{key\_eq} & \ccpp{11}{key\_eq} & \ccpwd{11}{key\_eq} & \dccpp{11}{key\_eq} & \ccpwd{}{} & \ccpp{}{} & \dccpwd{}{} \\ \hhline{|:==::=====::====::====::===:|}
+      \rowcolor{white}
+      \cellcolor{DodgerBlue}\bfseries{\textcolor{white}{Allocator}} & \mbrtcell{black}{\code{get\_allocator}} & \ccpp{}{} & \ccpw{03}{get\_allocator} & \ccpp{03}{get\_allocator} & \ccpw{11}{get\_allocator\_after} & \dccpp{03}{get\_allocator} & \ccpw{03}{get\_allocator} & \ccpp{03}{get\_allocator} & \ccpw{03}{get\_allocator} & \dccpp{03}{get\_allocator} & \ccpw{11}{get\_allocator} & \ccpp{11}{get\_allocator} & \ccpw{11}{get\_allocator} & \dccpp{11}{get\_allocator} & \ccpw{}{} & \ccpp{}{} & \dccpw{}{} \\ \hhline{|b==:b:=====:b:====:b:====:b:===b|}
+%      \end{tabu}
+    \end{tabular*}
+    \renewcommand{\arraystretch}{1}%
+\end{textblock}
+
+\setlength{\fboxrule}{5pt}
+
+\begin{textblock}{8.5}(107.91, 58.65)
+  \centering
+  \fcolorbox{DodgerBlue}{white}{
+    \ctparbox{7cm}{
+      \textcolor{black}{\huge{\bfseries{C++03}}}
+      
+      \vspace*{5mm}
+      \textcolor{cpp11}{\huge{\bfseries{C++11}}}
+      
+      \vspace*{5mm}
+      \textcolor{cpp17}{\huge{\bfseries{C++17}}}
+    }
+  }
+\end{textblock}
+
+\begin{textblock}{20}(39.4, 67.3)
+  \begin{center}
+    \parbox{17.8cm}{
+      \LARGEB{\myraggedright{\mywt{\emph{``The trouble with quick and dirty is that dirty remains long after quick has been forgotten.''}}}}
+      \LARGEB{\flushright{\myyw{\hfill -- Steve McConnell}}}}
+
+    \vspace*{12mm}
+    \parbox{17.8cm}{
+      \LARGEB{\myraggedright{\mywt{\emph{``Simple, not easy. There's a difference.''}}}}
+      \LARGEB{\flushright{\myyw{\hfill -- Ron Jeffries}}}}
+
+    \vspace*{12mm}
+    \parbox{17.8cm}{
+      \LARGEB{\myraggedright{\mywt{\emph{``Successful software always gets changed.''}}}}
+      \LARGEB{\flushright{\myyw{\hfill -- Fred Brooks}}}}
+  \end{center}
+\end{textblock}
+
+\tikzstyle{every picture}+=[remember picture]
+\tikzstyle{ptr} = [ultra thick, draw, color=white]
+\tikzstyle{frlink} = [dashed, draw, color=cyan]
+\begin{textblock}{30}(13.0,67.1)
+  \begin{frame}[t]
+    \begin{tikzpicture}
+      \node[coordinate] (fis) at (-2.5,3) {};
+      \node[] (fi) [text=white] at (10,3) {\huge{ Forward iteration\hspace*{5mm}}};
+      \node[coordinate] (fie) at (22.5,3) {};
+      \node[] (ft0) at (0,1.5) [text=white] {\texttt{\large{.size() == 4}}};
+      \node[] (ft6) at (15,1.5) [text=white] {\large{past the last element}};
+      \node (fn1) at (0,-2) [draw,text=white,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.begin()\linebreak .at(0)\linebreak $[$0$]$\linebreak .front()}}}\end{center}}};
+      \node (fn2) at (5,-2) [draw,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.at(1) [1]}}}\end{center}}};
+      \node (fn3) at (10,-2) [draw,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.at(2) [2]}}}\end{center}}};
+      \node (fn4) at (15,-2) [draw,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.rbegin()\linebreak .at(3)\linebreak $[3]$\linebreak .back()}}}\end{center}}};
+      \node (fn5) at (20,-2) [draw,color=white,ultra thick,dashed,minimum width=5cm,minimum height=5cm] {\texttt{\large{.end()}}};
+      \path (ft6.east) edge[line width=3pt,-{Latex},draw=white,bend left] (fn5.north);
+      \path (fis.east) edge[line width=5pt,draw=white] (fi.west);
+      \path (fi.east) edge[line width=5pt,-{Latex},draw=white] (fie.west);
+      \begin{pgfonlayer}{main}
+        \node (rt6) at (6,-12.5) [text=white] {\large{reverse past the last element}};
+        \node (rn1) at (0,-9) [draw,text=white,color=white,ultra thick,dashed,minimum width=5cm,minimum height=5cm] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.rend()}}}\end{center}}};
+        \node (rn2) at (5,-9) [draw,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.begin()\linebreak .at(0)\linebreak $[0]$\linebreak .front()}}}\end{center}}};
+        \node (rn3) at (10,-9) [draw,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.at(1) [1]}}}\end{center}}};
+        \node (rn4) at (15,-9) [draw,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.at(2) [2]}}}\end{center}}};
+        \node (rn5) at (20,-9) [draw,color=white,ultra thick,minimum width=5cm,minimum height=5cm,fill=cyan,opacity=1] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.rbegin()\linebreak .at(3)\linebreak $[3]$\linebreak .back()}}}\end{center}}};
+        \node[coordinate] (ris) at (-2.5,-14) {};
+        \node[] (ri) [text=white] at (10,-14) {\huge{ Reverse iteration\hspace*{5mm}}};
+        \node[coordinate] (rie) at (22.5,-14) {};
+      \end{pgfonlayer}
+      \path (rt6.west) edge[line width=3pt,-{Latex},draw=white,bend left] (rn1.south);
+      \begin{pgfonlayer}{background}
+        \path[-,frlink] (rn2.north) edge[line width=5pt] (fn1.south);
+        \path[-,frlink] (rn3.north) edge[line width=5pt] (fn2.south);
+        \path[-,frlink] (rn4.north) edge[line width=5pt] (fn3.south);
+        \path[-,frlink] (rn5.north) edge[line width=5pt] (fn4.south);
+      \end{pgfonlayer}
+      \path (ri.west) edge[line width=5pt,-{Latex},draw=white] (ris.east);
+      \path (rie.west) edge[line width=5pt,draw=white] (ri.east);
+    \end{tikzpicture}
+  \end{frame}
+\end{textblock}
+
+\begin{textblock}{30}(5.0,70.1)
+  \begin{frame}[t]
+    \begin{tikzpicture}
+      \node[] (et1) at (0,3) [text=white] {\parbox{5cm}{\begin{center}\textcolor{white}{\Large{Empty \linebreak container}}\end{center}}};
+      \node[] (et1) at (0,1) [text=white] {\texttt{\large{.size() == 0}}};
+      \node (en1) at (0,-2.5) [draw,text=white,dashed,color=white,ultra thick,minimum width=5cm,minimum height=5cm] {\parbox{4cm}{\begin{center}\textcolor{white}{\texttt{\large{.begin() .end()}}}\end{center}}};
+    \end{tikzpicture}
+  \end{frame}
+\end{textblock}
+
+\begin{textblock}{5.0}(5.5,81.9)
+%  \begin{beamercolorbox}[center,ignorebg]{postit}
+    \begin{center}
+      \includegraphics[width=5.2cm]{./dwm_orange_base.eps}
+      \linebreak
+      \mywt{\Large{@mcplex.net}}
+    \end{center}
+%  \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{49.8}(60.8,66.0)
+  %  \begin{tcolorbox}[tikznode={align=left},top=3pt,bottom=3pt,left=3pt,right=3pt,boxsep=0pt,colback=LeoniBlue,width=\linewidth+.7cm]
+%  \begin{beamercolorbox}[sep=-2mm,wd=54.5cm,rounded=true]{dodger}
+  \renewcommand{\arraystretch}{1.03}%
+  \arrayrulecolor{LeoniBlue}
+  \setlength{\arrayrulewidth}{2pt}
+  \setlength{\doublerulesep}{0pt}
+  \setlength\minrowclearance{1pt}
+  \setlength\extrarowsep{1pt}
+%  \setlength{\aboverulesep}{0pt}
+%  \setlength{\belowrulesep}{0pt}
+
+  \begin{tabular}{|c||c|c|c|c|c|l|}
+    \multicolumn{7}{c}{\mttitle{Iterator invalidation}} \\ \hhline{|-||-|-|-|-|-|-|}
+      \tccell{} & \tccell{} & \multicolumn{2}{c|}{\tccell{After insertion, are...}} & \multicolumn{2}{c|}{\tccell{After erasure, are...}} & \tccell{} \\
+      \multirow{-2}{*}{\tccell{Category}} & \multirow{-2}{*}{\tccell{Container}} & \tccell{iterators valid?} & \tccell{references valid?} & \tccell{iterators valid?} & \tccell{references valid?} & \tccell{\multirow{-2}{*}{Conditionally}} \\ \hhline{=::======}
+      \tccell{} & \cellcolor{white}\large{\bfseries{\code{array}}} & \multicolumn{2}{c|}{\cellcolor{white}N/A} & \multicolumn{2}{c|}{\cellcolor{white}N/A} & \cellcolor{white} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||------|}
+      \tccell{} & \cellcolor{LightGray} & \multicolumn{2}{c|}{\invt{no}{no}} & \multicolumn{2}{c|}{\cellcolor{LightGray}{N/A}} & \cellcolor{LightGray}\large{\bfseries{$\bullet$ Insertion changed capacity}} \\
+      \tccell{} & \cellcolor{LightGray} & \multicolumn{2}{c|}{\invt{yes}{yes}} & \multicolumn{2}{c|}{\invt{yes}{yes}} & \cellcolor{LightGray}\large{\bfseries{$\bullet$ Before modified element(s)}} \\
+      \tccell{} & \multirow{-3}{*}{\cellcolor{LightGray}\large{\bfseries{\code{vector}}}} & \multicolumn{2}{c|}{\invt{no}{no}} & \multicolumn{2}{c|}{\invt{no}{no}} & \cellcolor{LightGray}\large{\bfseries{$\bullet$ At or after modified element(s)}} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||------|}
+      \tccell{} & \cellcolor{white} & \cellcolor{no} & \invt{yes}{yes} & \multicolumn{2}{c|}{\invt{maybe}{Yes, except erased element(s)}} & \invt{}{$\bullet$ Modified first or last element} \\ \cline{4-7}
+      \tccell{} & \multirow{-2}{*}{\cellcolor{white}\large{\bfseries{\code{deque}}}} & \multirow{-2}{*}{\invt{no}{no}} & \invt{no}{no} & \multicolumn{2}{c|}{\invt{no}{no}} & \cellcolor{white}\large{\bfseries{$\bullet$ Modified middle only}} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||------|}
+      \tccell{} & \cellcolor{LightGray}{\large{\bfseries{\code{list}}}} & \multicolumn{2}{c|}{\invt{yes}{}} & \multicolumn{2}{c|}{\invt{maybe}{}} & \cellcolor{LightGray} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||->{\arrayrulecolor{yes}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{maybe}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{LightGray}}->{\arrayrulecolor{LeoniBlue}}|}
+      \multirow{-8}{*}{\tccell{\parbox{5cm}{\begin{center}\mywt{\bfseries{Sequence containers}}\end{center}}}} & \cellcolor{white}{\large{\bfseries{\code{forward\_list}}}} & \multicolumn{2}{c|}{\multirow{-2}{*}{\invt{yes}{yes}}} & \multicolumn{2}{c|}{\multirow{-2}{*}{\invt{maybe}{Yes, except erased element(s)}}} & \cellcolor{white} \\ \hhline{|=::=|==|==|=|}
+      \tccell{} & \cellcolor{LightGray}{\large{\bfseries{\code{set}}}} & \multicolumn{2}{c|}{\invt{yes}{}} & \multicolumn{2}{c|}{\invt{maybe}{}} & \cellcolor{LightGray} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||->{\arrayrulecolor{yes}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{maybe}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{LightGray}}->{\arrayrulecolor{LeoniBlue}}|}
+      \tccell{} & \cellcolor{white}{\large{\bfseries{\code{multiset}}}} & \multicolumn{2}{c|}{\invt{yes}{}} & \multicolumn{2}{c|}{\invt{maybe}{}} & \cellcolor{white} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||->{\arrayrulecolor{yes}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{maybe}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{white}}->{\arrayrulecolor{LeoniBlue}}|}
+      \tccell{} & \cellcolor{LightGray}{\large{\bfseries{\code{map}}}} & \multicolumn{2}{c|}{\invt{yes}{}} & \multicolumn{2}{c|}{\invt{maybe}{}} & \cellcolor{LightGray} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||->{\arrayrulecolor{yes}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{maybe}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{LightGray}}->{\arrayrulecolor{LeoniBlue}}|}
+      \multirow{-4}{*}{\parbox{5cm}{\begin{center}\tccell{Associative containers}\end{center}}} & \cellcolor{white}{\large{\bfseries{\code{multimap}}}} & \multicolumn{2}{c|}{\multirow{-4}{*}{\invt{yes}{yes}}} & \multicolumn{2}{c|}{\multirow{-4}{*}{\invt{maybe}{Yes, except erased element(s)}}} & \cellcolor{white} \\  \hhline{|=::=|==|==|=|}
+      \tccell{} & \cellcolor{LightGray}\large{\bfseries{\code{unordered\_set}}} & \invt{no}{no} & \invt{yes}{} & \multicolumn{2}{c|}{\invt{maybe}{}} & \cellcolor{LightGray}\large{\bfseries{$\bullet$ Insertion caused rehash}} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||->{\arrayrulecolor{no}}->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{yes}}->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{maybe}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{LeoniBlue}}-|}
+      \tccell{} & \cellcolor{white}{\large{\bfseries{\code{unordered\_multiset}}}} & \invt{yes}{} & \invt{yes}{} & \multicolumn{2}{c|}{\invt{maybe}{}} & \cellcolor{white} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||->{\arrayrulecolor{yes}}->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{yes}}->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{maybe}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{white}}->{\arrayrulecolor{LeoniBlue}}|}
+      \tccell{} & \cellcolor{LightGray}{\large{\bfseries{\code{unordered\_map}}}} & \invt{yes}{} & \invt{yes}{} & \multicolumn{2}{c|}{\invt{maybe}{}} & \cellcolor{white} \\ \hhline{|>{\arrayrulecolor{DodgerBlue}}->{\arrayrulecolor{LeoniBlue}}||->{\arrayrulecolor{yes}}->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{yes}}->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{maybe}}-->{\arrayrulecolor{LeoniBlue}}|>{\arrayrulecolor{white}}->{\arrayrulecolor{LeoniBlue}}|}
+      \multirow{-4}{*}{\parbox{5cm}{\begin{center}\tccell{Unsorted associative containers}\end{center}}} & \cellcolor{white}{\large{\bfseries{\code{unordered\_multimap}}}} & \multirow{-3}{*}{\invt{yes}{yes}} & \multirow{-4}{*}{\invt{yes}{yes}} & \multicolumn{2}{c|}{\multirow{-4}{*}{\invt{maybe}{yes, except erased element(s)}}} & \cellcolor{white}\multirow{-3}{*}{\invt{}{$\bullet$ No rehash}} \\
+    \end{tabular}
+    % \end{tabularx}
+    \renewcommand{\arraystretch}{1}%
+%  \end{beamercolorbox}
+%  \end{tcolorbox}
+\end{textblock}
+
+\end{document}

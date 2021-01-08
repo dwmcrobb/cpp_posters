@@ -1,0 +1,804 @@
+\documentclass{beamer}
+%% \usetheme{AnnArbor}
+\usepackage[orientation=landscape, size=a0, scale=0.8]{beamerposter}
+\setlength{\paperwidth}{48in}
+\setlength{\paperheight}{36in}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{color, colortbl}
+\usepackage{epsfig}
+\usepackage{etoolbox}
+\usepackage{fancyvrb}
+\usepackage{fix-cm}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{multirow}
+\usepackage{tabu, xcolor}
+\usepackage[scaled=1.03]{zi4}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{1cm}
+\definecolor{LeoniBlue}{RGB}{33,67,149}
+\definecolor{LightGray}{RGB}{224,224,224}
+\definecolor{lty}{RGB}{255,255,160}
+\definecolor{DarkGreen}{RGB}{0,160,0}
+\definecolor{DarkRed}{RGB}{160,0,0}
+\definecolor{DodgerBlue}{RGB}{30,144,255}
+\definecolor{purpleth}{RGB}{125,38,205}
+\definecolor{SaddleBrown}{RGB}{139,69,19}
+% \definecolor{wheat}{RGB}{255,232,189}
+\definecolor{wheat}{RGB}{255,255,204}
+% \definecolor{whd}{RGB}{238,216,174}
+\definecolor{whd}{RGB}{240,240,210}
+\definecolor{conceptbg}{RGB}{224,255,255}
+\definecolor{yes}{RGB}{192,255,192}
+\definecolor{yesd}{RGB}{168,224,168}
+\definecolor{no}{RGB}{255,176,176}
+\definecolor{nod}{RGB}{255,176,176}
+% \definecolor{PowderBlue}{RGB}{184,232,250}
+\definecolor{coddrow}{RGB}{194,246,255}
+\definecolor{coddrow}{RGB}{255,255,255}
+
+% \definecolor{nod}{RGB}{224,154,154}
+\setbeamercolor*{block body}{bg=white,fg=LeoniBlue}
+\setbeamercolor*{block title}{bg=LeoniBlue,fg=white}
+\makeatletter
+\def\Verbatim@font{\linespread{0.5}\fontfamily{zi4}\selectfont}
+\makeatother
+\makeatletter
+\newcommand\HUGE{\@setfontsize\Huge{72}{84}}
+\newcommand\HUGEB{\@setfontsize\Huge{108}{120}}
+\newcommand\HUGEC{\@setfontsize\Huge{64}{72}}
+\newcommand\Larger{\@setfontsize\Large{34}{40}}
+\makeatother
+
+\baselineskip=0pt
+
+\newtoggle{paper}
+% set to true when creating PostScript for poster, false when creaitng PDF
+\toggletrue{paper}
+% \togglefalse{paper}
+\iftoggle {paper} { \hypersetup{colorlinks=false} } { \hypersetup{urlcolor=blue,linkcolor=blue,colorlinks=true} }
+
+\newcommand\code[1]{\texttt{\textbf{#1}}}
+\newcommand\ccode[1]{\textcolor{black}{\texttt{\textbf{#1}}}}
+% \newcommand\hcode[1]{\textcolor{purpleth}{\texttt{\textbf{#1}}}}
+\newcommand\hcode[1]{\textcolor{black}{\texttt{\textbf{#1}}}}
+\newcommand\codel[1]{\texttt{#1}}
+
+%\newcommand{\cppss}[1]{
+%  \ifstrequal{#1}{11}{\textcolor{blue}{\bm{$^{\mathsf{C++#1}}$}}}
+%    {\ifstrequal{#1}{14}{\textcolor{DarkGreen}{\bm{$^{\mathsf{C++#1}}$}}}
+%      {\ifstrequal{#1}{17}{\textcolor{DarkGreen}{\bm{$^{\mathsf{C++#1}}$}}}
+%        {\ifstrequal{#1}{20}{\textcolor{DarkRed}{\bm{$^{\mathsf{C++#1}}$}}}
+%          {\textcolor{DarkRed}{\bm{$^{\mathsf{#1}}$}}}}}}}
+
+\newcommand{\cppss}[1]{
+  \ifstrequal{#1}{11}{\textcolor{blue}{\bf{\tiny{C++#1}}}}
+    {\ifstrequal{#1}{14}{\textcolor{DarkGreen}{\bf{\tiny{C++#1}}}}
+      {\ifstrequal{#1}{17}{\textcolor{DarkGreen}{\bf{\tiny{C++#1}}}}
+        {\ifstrequal{#1}{20}{\textcolor{DarkRed}{\bf{\tiny{C++#1}}}}
+          {\textcolor{DarkRed}{\bf{\tiny{#1}}}}}}}}
+
+\newcommand\lblue[1]{\textcolor{LeoniBlue}{#1}}
+\newcommand\mycy[1]{\textcolor{conceptbg}{#1}}
+\newcommand\mywt[1]{\textcolor{white}{#1}}
+\newcommand\mytblt[1]{\textcolor{LeoniBlue}{\textbf{\Large{#1}}}}
+\newcommand\ctblt[1]{\textcolor{blue}{\textbf{\Large{#1}}}}
+\newcommand\htblt[1]{\textcolor{purpleth}{\textbf{\Large{#1}}}}
+\newcommand{\myparbox}[2]{%
+  \parbox[t]{#1}{\linespread{0.7}\normalfont\raggedright#2\par
+  \vspace{-\prevdepth} % remove the depth of the last line
+  \vspace{0.5em} % add a fixed vertical space
+  }%
+}
+\newcommand\ctcbt[1]{\textcolor{lty}{\bf{\tt{#1}}}}
+\newcommand\ctcpt[1]{\textcolor{lty}{#1}}
+
+\setbeamercolor{background canvas}{bg=LeoniBlue,fg=white}
+\setbeamercolor{postit}{fg=LeoniBlue,bg=wheat}
+\setbeamercolor{concrete}{fg=black,bg=wheat}
+\setbeamercolor{concept}{fg=LeoniBlue,bg=conceptbg}
+\setbeamercolor{conceptual}{fg=black,bg=conceptbg}
+
+\setbeamercolor{lb}{fg=white,bg=LeoniBlue}
+\setbeamercolor{legend}{fg=LeoniBlue,bg=DodgerBlue}
+
+\begin{document}
+
+\begin{textblock}{65.2}(3.6,8.9)
+  \renewcommand{\arraystretch}{1.06}%
+  \begin{beamercolorbox}[sep=2mm,wd=65.2cm,rounded=true]{concrete}
+    \setlength\tabcolsep{.4em}
+    \begin{tabular*}{\linewidth}{l  l  l  l  l  l}
+      \multicolumn{6}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/container}{Sequence Containers}}\hspace*{1em} \textcolor{purpleth}{\large{\textbf{(containers which can be accessed sequentially)}}}} \\
+      \cellcolor{purpleth}\textcolor{white}{\bfseries{Type}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Description}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Template Parameters}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Search}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Iterator Type}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Value Type}} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/array}{\hcode{array}} & static contiguous array & \codel{class T, size\_t N} & \href{http://en.cppreference.com/w/cpp/algorithm/find}{\codel{std::find()}} & \href{http://en.cppreference.com/w/cpp/concept/RandomAccessIterator}{\ccode{RandomAccessIterator}} & \codel{T} \hfill \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/vector}{\hcode{vector}} & dynamic contiguous array & \codel{class T, class Allocator = std::allocator<T>} & \href{http://en.cppreference.com/w/cpp/algorithm/find}{\codel{std::find()}} & \href{http://en.cppreference.com/w/cpp/concept/RandomAccessIterator}{\ccode{RandomAccessIterator}} & \codel{T} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/deque}{\hcode{deque}} & double-ended queue & \codel{class T, class Allocator = std::allocator<T>} & \href{http://en.cppreference.com/w/cpp/algorithm/find}{\codel{std::find()}} & \href{http://en.cppreference.com/w/cpp/concept/RandomAccessIterator}{\ccode{RandomAccessIterator}} & \codel{T} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/forward_list}{\hcode{forward\_list}} & singly-linked list & \codel{class T, class Allocator = std::allocator<T>} & \href{http://en.cppreference.com/w/cpp/algorithm/find}{\codel{std::find()}} & \href{http://en.cppreference.com/w/cpp/concept/ForwardIterator}{\ccode{ForwardIterator}} & \codel{T} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/list}{\hcode{list}} & doubly-linked list & \codel{class T, class Allocator = std::allocator<T>} & \href{http://en.cppreference.com/w/cpp/algorithm/find}{\codel{std::find()}} & \href{http://en.cppreference.com/w/cpp/concept/BidirectionalIterator}{\ccode{BidirectionalIterator}} & \codel{T} \\
+      \multicolumn{6}{l}{} \\
+      \multicolumn{6}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/container}{Associative Containers}}\hspace*{1em} \textcolor{purpleth}{\large{\textbf{(sorted containers that can be quickly searched (O(log n) complexity))}}}} \\
+      \cellcolor{purpleth}\textcolor{white}{\bfseries{Type}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Description}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Template Parameters}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Search}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Iterator Type}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Value Type}} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/set}{\hcode{set}} & collection of unique keys
+      & \begin{minipage}[h]{11.6in}
+          \linespread{0.5}
+          \begin{Verbatim}[commandchars=\\\{\}]
+class Key, class Compare = std::less<Key>, class Allocator = std::allocator<Key>
+            \end{Verbatim}
+      \end{minipage} & \href{http://en.cppreference.com/w/cpp/container/set/find}{\codel{.find()}} & \href{http://en.cppreference.com/w/cpp/concept/BidirectionalIterator}{\ccode{BidirectionalIterator}} & \codel{Key} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/map}{\hcode{map}} & \parbox{8cm}{\linespread{0.5}\selectfont collection of key-value pairs, unique keys}
+      & \begin{minipage}{8.7in}
+          \linespread{0.5}
+          \begin{Verbatim}[commandchars=\\\{\}]
+class Key, class T, class Compare = std::less<Key>,
+class Allocator = std::allocator<std::pair<const Key, T>>
+          \end{Verbatim}
+      \end{minipage} & \href{http://en.cppreference.com/w/cpp/container/map/find}{\codel{.find()}} & \href{http://en.cppreference.com/w/cpp/concept/BidirectionalIterator}{\ccode{BidirectionalIterator}} & \href{http://en.cppreference.com/w/cpp/utility/pair}{\codel{pair<const Key,T>}} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/multiset}{\hcode{multiset}} & collection of keys
+      & \begin{minipage}{10.9in}
+          \linespread{0.5}
+          \begin{Verbatim}[commandchars=\\\{\}]
+class Key, class Compare = std::less<Key>, class Allocator = std::allocator<Key>
+            \end{Verbatim}
+      \end{minipage} & \href{http://en.cppreference.com/w/cpp/container/multiset/find}{\codel{.find()}} & \href{http://en.cppreference.com/w/cpp/concept/BidirectionalIterator}{\ccode{BidirectionalIterator}} & \codel{Key} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/multimap}{\hcode{multimap}} & collection of key-value pairs
+      & \begin{minipage}{8.7in}
+          \linespread{0.5}
+          \begin{Verbatim}[commandchars=\\\{\}]
+class Key, class T, class Compare = std::less<Key>,
+class Allocator = std::allocator<std::pair<const Key, T>>
+          \end{Verbatim}
+        \end{minipage} & \href{http://en.cppreference.com/w/cpp/container/multimap/find}{\codel{.find()}} & \href{http://en.cppreference.com/w/cpp/concept/BidirectionalIterator}{\ccode{BidirectionalIterator}} & \href{http://en.cppreference.com/w/cpp/utility/pair}{\codel{pair<const Key,T>}} \\
+      \multicolumn{6}{l}{} \\
+      \multicolumn{6}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/container}{Unordered Associative Containers}}\hspace*{1em} \textcolor{purpleth}{\large{\textbf{(unordered associative containers (hashed) that can be quickly searched (O(1) amortized, O(n) worst-case complexity))}}}} \\
+      \cellcolor{purpleth}\textcolor{white}{\bfseries{Type}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Description}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Template Parameters}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Search}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Iterator Type}} & \cellcolor{purpleth}\textcolor{white}{\bfseries{Value Type}} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/unordered_set}{\hcode{unordered\_set}} & collection of unique keys
+      & \begin{minipage}{8.7in}
+          \linespread{0.5}
+\begin{Verbatim}[commandchars=\\\{\}]
+class Key, class Hash = std::hash<Key>, class KeyEqual = std::equal\_to<Key>,
+class Allocator = std::allocator<Key>
+\end{Verbatim}
+          \end{minipage} & \href{http://en.cppreference.com/w/cpp/container/unordered_map/find}{\codel{.find()}} & \href{http://en.cppreference.com/w/cpp/concept/ForwardIterator}{\ccode{ForwardIterator}} & \href{http://en.cppreference.com/w/cpp/utility/pair}{\codel{pair<const Key,T>}} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/unordered_multiset}{\hcode{unordered\_multiset}} & collection of keys
+      & \begin{minipage}{7in}
+          \linespread{0.5}
+          \begin{Verbatim}[commandchars=\\\{\}]
+class Key, class Hash = std::hash<Key>, class KeyEqual = std::equal_to<Key>,
+class Allocator = std::allocator<std::pair<const Key, T>>
+          \end{Verbatim}
+        \end{minipage} & \href{http://en.cppreference.com/w/cpp/container/unordered_multiset/find}{\codel{.find()}} & \href{http://en.cppreference.com/w/cpp/concept/ForwardIterator}{\ccode{ForwardIterator}} & \codel{Key} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/container/unordered_multimap}{\hcode{unordered\_multimap}} & collection of key-value pairs
+      & \begin{minipage}{7in}
+          \linespread{0.5}
+          \begin{Verbatim}[commandchars=\\\{\}]
+class Key, class T, class Hash = std::hash<Key>,
+class KeyEqual = std::equal_to<Key>,
+class Allocator = std::allocator<std::pair<const Key, T>>
+          \end{Verbatim}
+          \end{minipage} & \href{http://en.cppreference.com/w/cpp/container/unordered_multimap/find}{\codel{.find()}} & \href{http://en.cppreference.com/w/cpp/concept/ForwardIterator}{\ccode{ForwardIterator}} & \href{http://en.cppreference.com/w/cpp/utility/pair}{\codel{pair<const Key,T>}} \\
+    \end{tabular*}
+  \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{121.9}(0,4.0)
+  \begin{center}
+    \mywt{\HUGEB{\bfseries{Modern C++ Containers, Algorithms and Concepts}}}
+    \end{center}
+\end{textblock}
+
+\begin{textblock}{50.5}(69.9,17.9)
+  \Larger{\mywt{\emph{``The standard library saves programmers from having to reinvent the wheel.''}\hspace*{2cm} -- Bjarne Stroustrup}}
+\end{textblock}
+
+\begin{textblock}{16.7}(69.6,20.1)
+    \begin{beamercolorbox}[center,rounded=true,sep=5mm,ht=3cm,wd=16.7cm]{postit}
+      \textcolor{purpleth}{\HUGE{concrete}}
+      \vspace*{2mm}
+    \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{16.7}(69.6,23.7)
+    \begin{beamercolorbox}[center,rounded=true,sep=5mm,wd=16.7cm]{concept}
+      \textcolor{blue}{\HUGE{conceptual}}
+    \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{16}(70.2,28.0)
+  \Large{\mywt{Organization and content thanks to the C++17 standard and cppreference.com}}
+\end{textblock}
+
+\begin{textblock}{30.4}(87.1,20.1)
+  \begin{beamercolorbox}[sep=2mm,wd=30.9cm,rounded=true]{concrete}
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/iterator}{Iterator adaptors}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/reverse_iterator}{\hcode{reverse\_iterator}} & iterator adaptor for reverse-order traversal \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/make_reverse_iterator}{\hcode{make\_reverse\_iterator}} \cppss{14} & creates a \href{http://en.cppreference.com/w/cpp/iterator/reverse_iterator}{\hcode{reverse\_iterator}} of type inferred from the argument \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/move_iterator}{\hcode{move\_iterator}} \cppss{11} & iterator adaptor which dereferences to an \href{http://en.cppreference.com/w/cpp/language/reference}{rvalue reference} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/make_move_iterator}{\hcode{make\_move\_iterator}} \cppss{11} & creates a \href{http://en.cppreference.com/w/cpp/iterator/move_iterator}{\hcode{move\_iterator}} of type inferred from the argument \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/back_insert_iterator}{\hcode{back\_insert\_iterator}} & iterator adaptor for insertion at the end of a container \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/back_inserter}{\hcode{back\_inserter}} & creates a \href{http://en.cppreference.com/w/cpp/iterator/back_insert_iterator}{\hcode{back\_insert\_iterator}} of type inferred from the argument \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/front_insert_iterator}{\hcode{front\_insert\_iterator}} & iterator adaptor for insertion at the front of a container \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/front_inserter}{\hcode{front\_inserter}} & creates a \href{http://en.cppreference.com/w/cpp/iterator/front_insert_iterator}{\hcode{front\_insert\_iterator}} of type inferred from the argument \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/insert_iterator}{\hcode{insert\_iterator}} & iterator adaptor for insertion into a container \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/iterator/inserter}{\hcode{inserter}} & creates a \href{http://en.cppreference.com/w/cpp/iterator/insert_iterator}{\hcode{insert\_iterator}} of type inferred from the argument \\
+    \end{tabular*}
+    \end{beamercolorbox}
+\end{textblock}
+
+\newcommand\yescell{\cellcolor{yes}\checkmark}
+\newcommand\yesdcell{\cellcolor{yesd}\checkmark}
+\newcommand\nocell{\cellcolor{no}}
+\newcommand\nodcell{\cellcolor{nod}}
+
+\begin{textblock}{57.4}(69.6,8.9)
+  \begin{beamercolorbox}[sep=2mm,wd=48.4cm,rounded=true]{conceptual}
+    \begin{tabular*}{47.8cm}{l|c|c|c|c|c|c}
+      \multicolumn{6}{l}{\ctblt{Iterator categories}} \\ \hline
+      \rowcolor{DodgerBlue}
+      \mywt{\bfseries{Defined operations}} & \href{http://en.cppreference.com/w/cpp/concept/ContiguousIterator}{\mywt{\bfseries{ContiguousIterator}}} & \href{http://en.cppreference.com/w/cpp/concept/RandomAccessIterator}{\mywt{\bfseries{RandomAccessIterator}}} & \href{http://en.cppreference.com/w/cpp/concept/BidirectionalIterator}{\mywt{\bfseries{BidirectionalIterator}}} & \href{http://en.cppreference.com/w/cpp/concept/ForwardIterator}{\mywt{\bfseries{ForwardIterator}}} & \href{http://en.cppreference.com/w/cpp/concept/InputIterator}{\mywt{\bfseries{InputIterator}}} & \href{http://en.cppreference.com/w/cpp/concept/OutputIterator}{\mywt{\bfseries{OutputIterator}}} \\ \hline
+      % \rowcolor{white}
+      read, increment (without multiple passes)  & \yesdcell  & \yesdcell  & \yesdcell  & \yesdcell  & \yesdcell   & \nodcell \\
+      \rowcolor{coddrow}
+      increment (with multiple passes)           & \yescell & \yescell & \yescell & \yescell & \nocell   & \nocell \\
+      % \rowcolor{white}
+      decrement                                  & \yesdcell  & \yesdcell  & \yesdcell  & \nodcell   & \nodcell    & \nodcell \\
+      \rowcolor{coddrow}
+      random access                              & \yescell & \yescell & \nocell  & \nocell  & \nocell   & \nocell \\
+      % \rowcolor{white}
+      contiguous storage                         & \yesdcell  & \nodcell   & \nodcell   & \nodcell   & \nodcell    & \nodcell \\
+      \rowcolor{coddrow}
+      write, increment (without multiple passes) & \nocell  & \nocell  & \nocell  & \nocell  & \nocell   & \yescell \\
+    \end{tabular*}
+  \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{28.6}(3.6,31)
+  \begin{beamercolorbox}[sep=5mm,wd=29.1cm,rounded=true]{concrete}
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Non-modifying sequence operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/all_any_none_of}{\hcode{all\_of}} \cppss{11} & \myparbox{21.7cm}{checks if a predicate is true for all of the elements in a range} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/all_any_none_of}{\hcode{any\_of}} \cppss{11} & checks if a predicate is true for any of the elements in a range \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/all_any_none_of}{\hcode{none\_of}} \cppss{11} & checks if a predicate is true for none of the elements in a range \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/for_each}{\hcode{for\_each}} & applies a function to a range of elements \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/for_each_n}{\hcode{for\_each\_n}} \cppss{17} & applies a function object to the first n elements of a sequence \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/count}{\hcode{count}} & returns the number of elements satisfying specific criteria \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/count}{\hcode{count\_if}} & returns the number of elements satisfying specific criteria \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/mismatch}{\hcode{mismatch}} & finds the first position where two ranges differ \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/find}{\hcode{find}} & finds the first element satisfying specific criteria \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/find}{\hcode{find\_if}} & finds the first element satisfying specific criteria \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/find}{\hcode{find\_if\_not}} \cppss{11} & finds the first element satisfying specific criteria \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/find_end}{\hcode{find\_end}} & finds the last sequence of elements in a certain range \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/find_first_of}{\hcode{find\_first\_of}} & searches for any one of a set of elements \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/adjacent_find}{\hcode{adjacent\_find}} & finds the first two adjacent items that are equal (or satisfy a given predicate) \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/search}{\hcode{search}} & searches for a range of elements \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/search_n}{\hcode{search\_n}} & searches for a number of consecutive copies of an element in a range \\
+    \end{tabular*}
+
+    \vspace*{3.5mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Modifying sequence operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/copy}{\hcode{copy}} & copies a range of elements to a new location \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/copy}{\hcode{copy\_if}} \cppss{11} & copies a range of elements to a new location \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/copy_n}{\hcode{copy\_n}} \cppss{11} & copies a number of elements to a new location \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/copy_backward}{\hcode{copy\_backward}} & copies a range of elements in backwards order \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/move}{\hcode{move}} \cppss{11} & moves a range of elements to a new location \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/move_backward}{\hcode{move\_backward}} \cppss{11} & moves a range of elements to a new location in backwards order \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/fill}{\hcode{fill}} & copy-assigns the given value to every element in a range \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/fill_n}{\hcode{fill\_n}} & copy-assigns the given value to N elements in a range \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/transform}{\hcode{transform}} & applies a function to a range of elements \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/generate}{\hcode{generate}} & \myparbox{19.9cm}{assigns the results of successive function calls to every element in a range} \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/generate_n}{\hcode{generate\_n}} & \myparbox{19.3cm}{assigns the results of successive function calls to N elements in a range} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/remove}{\hcode{remove}} & removes elements satisfying specific criteria \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/remove}{\hcode{remove\_if}} & removes elements satisfying specific criteria \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/remove_copy}{\hcode{remove\_copy}} & \myparbox{19.3cm}{copies a range of elements omitting those that satisfy specific criteria} \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/remove_copy}{\hcode{remove\_copy\_if}} & \myparbox{19.3cm}{copies a range of elements omitting those that satisfy specific criteria} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/replace}{\hcode{replace}} & replaces all values satisfying specific criteria with another value \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/replace}{\hcode{replace\_if}} & replaces all values satisfying specific criteria with another value \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/replace_copy}{\hcode{replace\_copy}} & \myparbox{19.3cm}{copies a range, replacing elements satisfying specific criteria with another value} \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/replace_copy}{\hcode{replace\_copy\_if}} & \myparbox{19.3cm}{copies a range, replacing elements satisfying specific criteria with another value} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/swap}{\hcode{swap}} & swaps the values of two objects \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/swap_ranges}{\hcode{swap\_ranges}} & swaps two ranges of elements \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/iter_swap}{\hcode{iter\_swap}} & swaps the elements pointed to by two iterators \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/reverse}{\hcode{reverse}} & reverses the order of elements in a range \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/reverse_copy}{\hcode{reverse\_copy}} & creates a copy of a range that is reversed \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/rotate}{\hcode{rotate}} & rotates the order of elements in a range \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/rotate_copy}{\hcode{rotate\_copy}} & copies and rotate a range of elements \\
+      % \rowcolor{LightGray}
+      \href{http://en.cppreference.com/w/cpp/algorithm/random_shuffle}{\hcode{random\_shuffle}} \cppss{until{\;}C++17} & randomly re-orders elements in a range \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/random_shuffle}{\hcode{shuffle}} \cppss{11} & randomly re-orders elements in a range \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/sample}{\hcode{sample}} \cppss{17} & selects n random elements from a sequence \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/unique}{\hcode{unique}} & removes consecutive duplicate elements in a range \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/unique_copy}{\hcode{unique\_copy}} & \myparbox{19.3cm}{creates a copy of some range of elements that contains no consecutive duplicates} \\
+    \end{tabular*}
+
+    \vspace*{3mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Partitioning operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/is_partitioned}{\hcode{is\_partitioned}} \cppss{11} & determines if the range is partitioned by the given predicate \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/partition}{\hcode{partition}} & \myparbox{20.3cm}{divides a range of elements into two groups} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/partition_copy}{\hcode{partition\_copy}} \cppss{11} & copies a range dividing the elements into two groups \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/stable_partition}{\hcode{stable\_partition}} & divides elements into two groups while preserving their relative order \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/partition_point}{\hcode{partition\_point}} \cppss{11} & locates the partition point of a partitioned range \\
+    \end{tabular*}
+
+    \vspace*{4mm}
+
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Permutation operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/is_permutation}{\hcode{is\_permutation}} & determines if a sequence is a permutation of another sequence \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/next_permutation}{\hcode{next\_permutation}} & \myparbox{21.5cm}{generates the next greater lexicographic permutation of a range of elements} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/prev_permutation}{\hcode{prev\_permutation}} & \myparbox{21.5cm}{generates the next smaller lexicographic permutation of a range of elements} \\
+    \end{tabular*}
+  \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{25.6}(33.6,31)
+  \begin{beamercolorbox}[sep=4mm,wd=26.1cm,rounded=true]{concrete}
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Sorting operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/is_sorted}{\hcode{is\_sorted}} \cppss{11} & checks whether a range is sorted into ascending order \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/is_sorted_until}{\hcode{is\_sorted\_until}} \cppss{11} & finds the largest sorted subrange \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/sort}{\hcode{sort}} & sorts a range into ascending order \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/partial_sort}{\hcode{partial\_sort}} & sorts the first N elements of a range \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/partial_sort_copy}{\hcode{partial\_sort\_copy}} & \myparbox{17.3cm}{copies and partially sorts a range of elements} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/stable_sort}{\hcode{stable\_sort}} & \myparbox{17.2cm}{sorts a range of elements while preserving order between equal elements} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/nth_element}{\hcode{nth\_element}} & \myparbox{17.2cm}{partially sort a range such that it is partitioned by the given element} \\
+    \end{tabular*}
+
+    \vspace*{2mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Binary search operations (on sorted ranges)}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/lower_bound}{\hcode{lower\_bound}} & \myparbox{19.6cm}{returns an iterator to the first element not less than the given value} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/upper_bound}{\hcode{upper\_bound}} & returns an iterator to the first element greater than a certain value \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/binary_search}{\hcode{binary\_search}} & determines if an element exists in a certain range \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/equal_range}{\hcode{equal\_range}} & returns range of elements matching a specific key \\
+    \end{tabular*}
+
+    \vspace*{2mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Set operations (on sorted ranges)}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/merge}{\hcode{merge}} & \myparbox{15.65cm}{merges two sorted ranges} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/inplace_merge}{\hcode{inplace\_merge}} & merges two ordered ranges in-place \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/includes}{\hcode{includes}} & returns true if one set is a subset of another \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/set_difference}{\hcode{set\_difference}} & computes the difference between two sets \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/set_intersection}{\hcode{set\_intersection}} & computes the intersection of two sets \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/set_symmetric_difference}{\hcode{set\_symmetric\_difference}} & computes the symmetric difference between two sets \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/set_union}{\hcode{set\_union}} & computes the union of two sets \\
+    \end{tabular*}
+
+    \vspace*{2mm}
+
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Heap operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/is_heap}{\hcode{is\_heap}} \cppss{11} & \myparbox{18.0cm}{checks if the given range is a max heap} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/is_heap_until}{\hcode{is\_heap\_until}} \cppss{11} & finds the largest subrange that is a max heap \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/make_heap}{\hcode{make\_heap}} & creates a max heap out of a range of elements \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/push_heap}{\hcode{push\_heap}} & adds an element to a max heap \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/pop_heap}{\hcode{pop\_heap}} & removes the largest element from a max heap \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/sort_heap}{\hcode{sort\_heap}} & \myparbox{17.9cm}{turns a max heap into a range of elements sorted in ascending order} \\
+    \end{tabular*}
+
+    \vspace*{2mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Minimum/maximum operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/max}{\hcode{max}} \cppss{11} & \myparbox{17.65cm}{returns the greater of the given values} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/max_element}{\hcode{max\_element}} \cppss{11} & returns the largest element in a range \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/min}{\hcode{min}} & returns the smaller of the given values \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/min_element}{\hcode{min\_element}} & returns the smallest element in a range \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/minmax}{\hcode{minmax}} \cppss{11} & returns the smaller and larger of two elements \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/minmax_element}{\hcode{minmax\_element}} \cppss{11} & returns the smallest and the largest elements in a range \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/clamp}{\hcode{clamp}} \cppss{17} & tclamps a value between a pair of boundary values \\
+    \end{tabular*}
+
+    \vspace*{2mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Comparison operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/equal}{\hcode{equal}} & \myparbox{12.65cm}{determines equality of two sets of elements} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/lexicographical_compare}{\hcode{lexicographical\_compare}} & \myparbox{12.6cm}{returns true if one range is lexicographically less than another} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/compare_3way}{\hcode{compare\_3way}}\cppss{20} & \myparbox{12.6cm}{compares two values using 3-way comparison} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/lexicographical_compare_3way}{\hcode{lexicographical\_compare\_3way}}\cppss{20} & \myparbox{12.85cm}{compares two ranges using 3-way comparison} \\
+    \end{tabular*}
+
+    \vspace*{2mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Numeric operations}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/iota}{\hcode{iota}} \cppss{11} & \myparbox{13.9cm}{fills a range with successive increments of the starting value} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/accumulate}{\hcode{accumulate}} & sums up a range of elements \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/inner_product}{\hcode{inner\_product}} & \myparbox{13.9cm}{computes the inner product of two ranges of elements} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/adjacent_difference}{\hcode{adjacent\_difference}} & \myparbox{13.9cm}{computes the differences between adjacent elements in a range} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/partial_sum}{\hcode{partial\_sum}} & computes the partial sum of a range of elements \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/reduce}{\hcode{reduce}} \cppss{17} & similar to \hcode{accumulate}, except out of order \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/exclusive_scan}{\hcode{exclusive\_scan}} \cppss{17} & \myparbox{13.9cm}{similar to \href{http://en.cppreference.com/w/cpp/algorithm/partial_sum}{\hcode{partial\_sum}}, excludes the ith input element from the ith sum} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/inclusive_scan}{\hcode{inclusive\_scan}} \cppss{17} & \myparbox{14.1cm}{similar to \href{http://en.cppreference.com/w/cpp/algorithm/partial_sum}{\hcode{partial\_sum}}, includes the ith input element in the ith sum} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/transform_reduce}{\hcode{transform\_reduce}} \cppss{17} & applies a functor, then reduces out of order \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/transform_exclusive_scan}{\hcode{transform\_exclusive\_scan}} \cppss{17} & applies a functor, then calculates exclusive scan \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/algorithm/transform_inclusive_scan}{\hcode{transform\_inclusive\_scan}} \cppss{17} & applies a functor, then calculates inclusive scan \\
+    \end{tabular*}
+  \end{beamercolorbox}
+\end{textblock}
+  
+\begin{textblock}{27.5}(60.6,31)
+  \begin{beamercolorbox}[sep=4mm,wd=28.2cm,rounded=true]{concrete}
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/algorithm}{Operations on uninitialized memory}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_copy}{\hcode{uninitialized\_copy}} & \myparbox{13.0cm}{copies a range of objects to an uninitialized area of memory} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_copy_n}{\hcode{uninitialized\_copy\_n}} \cppss{11} & \myparbox{13.0cm}{copies a number of objects to an uninitialized area of memory} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_fill}{\hcode{uninitialized\_fill}} & \myparbox{13.0cm}{copies an object to an uninitialized area of memory, defined by a range} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_fill_n}{\hcode{uninitialized\_fill\_n}} & \myparbox{13.0cm}{copies an object to an uninitialized area of memory, defined by a start and a count} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_move}{\hcode{uninitialized\_move}} \cppss{17} & \myparbox{13.0cm}{moves a range of objects to an uninitialized area of memory} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_move_n}{\hcode{uninitialized\_move\_n}} \cppss{17} & \myparbox{13.0cm}{moves a number of objects to an uninitialized area of memory} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_default_construct}{\hcode{uninitialized\_default\_construct}} \cppss{17} & \myparbox{13.0cm}{constructs objects by default-initialization in an uninitialized area of memory, defined by a range} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_default_construct_n}{\hcode{uninitialized\_default\_construct\_n}} \cppss{17} & \myparbox{13.0cm}{constructs objects by default-initialization in an uninitialized area of memory, defined by a start and a count} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_value_construct}{\hcode{uninitialized\_value\_construct}} \cppss{17} & \myparbox{13.0cm}{constructs objects by value-initialization in an uninitialized area of memory, defined by a range} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/uninitialized_value_construct_n}{\hcode{uninitialized\_value\_construct\_n}} \cppss{17} & \myparbox{13.0cm}{constructs objects by value-initialization in an uninitialized area of memory, defined by a start and a count} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/destroy_at}{\hcode{destroy\_at}} \cppss{17} & destroys an object at a given address \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/destroy}{\hcode{destroy}} \cppss{17} & destroys a range of objects \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/destroy_n}{\hcode{destroy\_n}} \cppss{17} & destroys a number of objects in a range \\
+    \end{tabular*}
+  \end{beamercolorbox}
+
+  \vspace*{6.75mm}
+
+  \begin{beamercolorbox}[sep=4mm,wd=28.2cm,rounded=true]{concrete}
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\htblt{\href{http://en.cppreference.com/w/cpp/memory}{Smart pointers}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/unique_ptr}{\hcode{unique\_ptr}} \cppss{11} & \myparbox{20.0cm}{smart pointer with unique object ownership semantics} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/shared_ptr}{\hcode{shared\_ptr}} \cppss{11} & smart pointer with shared object ownership semantics \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/weak_ptr}{\hcode{weak\_ptr}} \cppss{11} & weak reference to an object managed by \href{http://en.cppreference.com/w/cpp/memory/shared_ptr}{\code{shared\_ptr}} \\
+      \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/memory/auto_ptr}{\hcode{auto\_ptr}} \cppss{removed{\;}in{\;}C++17} & smart pointer with strict object ownership semantics \\
+    \end{tabular*}
+  \end{beamercolorbox}
+
+  \vspace*{6.75mm}
+  
+  %  \begin{beamercolorbox}[sep=4mm,wd=28.2cm,rounded=true]{concept}
+  \begin{beamercolorbox}[sep=4mm,wd=28.2cm,rounded=true]{conceptual}
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Library layout concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/TriviallyCopyable}{\ccode{TriviallyCopyable}} \cppss{11} & class with trivial copy, assignment and destructor \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/TrivialType}{\ccode{TrivialType}} \cppss{11} & class with trivial constructors, assignment and destructor \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/StandardLayoutType}{\ccode{StandardLayoutType}} \cppss{11} & \myparbox{18.3cm}{non-virtual class containing only other StandardLayout members, all with the same access control} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/PODType}{\ccode{PODType}} & POD (Plain Old Data) structure, compatible with C struct \\
+    \end{tabular*}
+
+    \vspace*{5.0mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Library basic concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/DefaultConstructible}{\ccode{DefaultConstructible}} & specifies that an object of the type can be default constructed \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/MoveConstructible}{\ccode{MoveConstructible}}\cppss{11} & specifies that an object of the type can be constructed from rvalue \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/CopyConstructible}{\ccode{CopyConstructible}} & specifies that an object of the type can be constructed from lvalue \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/MoveAssignable}{\ccode{MoveAssignable}}\cppss{11} & specifies that an object of the type can be assigned from rvalue \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/CopyAssignable}{\ccode{CopyAssignable}} & specifies that an object of the type can be assigned from lvalue \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/Destructible}{\ccode{Destructible}} & \myparbox{18.9cm}{specifies that an object of the type can be destroyed} \\
+    \end{tabular*}
+  
+    \vspace*{4.5mm}
+  
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Library-wide concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/EqualityComparable}{\ccode{EqualityComparable}} & \myparbox{19.05cm}{\code{operator ==} is an equivalence relation} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/LessThanComparable}{\ccode{LessThanComparable}} & \code{operator <} is a strict weak ordering relation \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/Swappable}{\ccode{Swappable}} \cppss{11} & can be swapped with an unqualified non-member function \code{swap()} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/ValueSwappable}{\ccode{ValueSwappable}} \cppss{11} & an \href{http://en.cppreference.com/w/cpp/concept/Iterator}{\ccode{Iterator}} that dereferences to a \href{http://en.cppreference.com/w/cpp/concept/Swappable}{\ccode{Swappable}} type \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/NullablePointer}{\ccode{NullablePointer}} \cppss{11} & a pointer-like type supporting a null value \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/Hash}{\ccode{Hash}} \cppss{11} & \myparbox{19.0cm}{a \href{http://en.cppreference.com/w/cpp/concept/FunctionObject}{\ccode{FunctionObject}} that for inputs with different values has a low probability of giving the same output} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/Allocator}{\ccode{Allocator}} & a class type that contains allocation information \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/FunctionObject}{\ccode{FunctionObject}} & an object that can be called with the function call syntax \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/Callable}{\ccode{Callable}} & a type for which the invoke operation is defined  \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/Predicate}{\ccode{Predicate}} & \myparbox{19.4cm}{a \href{http://en.cppreference.com/w/cpp/concept/FunctionObject}{\ccode{FunctionObject}} that returns a value convertible to bool for one argument without modifying it} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/BinaryPredicate}{\ccode{BinaryPredicate}} & \myparbox{19.0cm}{a \href{http://en.cppreference.com/w/cpp/concept/FunctionObject}{\ccode{FunctionObject}} that returns a value convertible to bool for two arguments without modifying them} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/Compare}{\ccode{Compare}} & a \href{http://en.cppreference.com/w/cpp/concept/BinaryPredicate}{\ccode{BinaryPredicate}} that establishes an ordering relation \\
+    \end{tabular*}
+  \end{beamercolorbox}
+
+\end{textblock}
+
+\begin{textblock}{27.5}(89.8,31)
+  \begin{beamercolorbox}[sep=4mm,wd=28.2cm,rounded=true]{conceptual}
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Container concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/Container}{\ccode{Container}} & \myparbox{14.1cm}{data structure that allows element access using iterators} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/ReversibleContainer}{\ccode{ReversibleContainer}} & container using bidirectional iterators \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/AllocatorAwareContainer}{\ccode{AllocatorAwareContainer}} \cppss{11} & container using an allocator \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/SequenceContainer}{\ccode{SequenceContainer}} & container with elements stored linearly \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/ContiguousContainer}{\ccode{ContiguousContainer}} \cppss{11} & \myparbox{14.1cm}{container with elements stored at adjacent memory addresses} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/AssociativeContainer}{\ccode{AssociativeContainer}} & \myparbox{14.3cm}{container that stores elements by associating them to keys} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/UnorderedAssociativeContainer}{\ccode{UnorderedAssociativeContainer}} \cppss{11} & \myparbox{14.1cm}{container that stores elements stored in buckets by associating them to keys} \\
+    \end{tabular*}
+    
+    \vspace*{2mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Container element concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/DefaultInsertable}{\ccode{DefaultInsertable}} \cppss{11} & element can be default-constructed in uninitialized storage \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/CopyInsertable}{\ccode{CopyInsertable}} \cppss{11} & element can be copy-constructed in uninitialized storage \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/MoveInsertable}{\ccode{MoveInsertable}} \cppss{11} & element can be move-constructed in uninitialized storage \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/EmplaceConstructible}{\ccode{EmplaceConstructible}} \cppss{11} & element can be constructed in uninitialized storage \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/Erasable}{\ccode{Erasable}} \cppss{11} & \myparbox{17.5cm}{element can be destroyed using an allocator} \\
+    \end{tabular*}
+
+    \vspace*{3mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Iterator concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/Iterator}{\ccode{Iterator}} & general concept to access data within some data structure \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/InputIterator}{\ccode{InputIterator}} & iterator that can be used to read data \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/OutputIterator}{\ccode{OutputIterator}} & iterator that can be used to write data \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/ForwardIterator}{\ccode{ForwardIterator}} & iterator that can be used to read data multiple times \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/BidirectionalIterator}{\ccode{BidirectionalIterator}} & iterator that can be both incremented and decremented \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/RandomAccessIterator}{\ccode{RandomAccessIterator}} & iterator that can be advanced in constant time \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/ContiguousIterator}{\ccode{ContiguousIterator}} \cppss{17} & \myparbox{18.2cm}{iterator to contiguously-allocated elements} \\
+    \end{tabular*}
+    
+    \vspace*{3mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Concurrency concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/BasicLockable}{\ccode{BasicLockable}} \cppss{11} & \myparbox{18.7cm}{provides exclusive ownership semantics for execution agents (i.e. threads)} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/Lockable}{\ccode{Lockable}} \cppss{11} & extends the \href{http://en.cppreference.com/w/cpp/concept/BasicLockable}{\ccode{BasicLockable}} concept to include attempted locking \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/TimedLockable}{\ccode{TimedLockable}} \cppss{11} & a \href{http://en.cppreference.com/w/cpp/concept/Lockable}{\ccode{Lockable}} that supports timed lock acquisition \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/Mutex}{\ccode{Mutex}} \cppss{11} & \myparbox{18.7cm}{extends the \href{http://en.cppreference.com/w/cpp/concept/Lockable}{\ccode{Lockable}} concept to include inter-thread synchronization} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/TimedMutex}{\ccode{TimedMutex}} \cppss{11} & \myparbox{18.9cm}{extends the \href{http://en.cppreference.com/w/cpp/concept/TimedLockable}{\ccode{TimedLockable}} concept to include inter-thread synchronization} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/SharedMutex}{\ccode{SharedMutex}} \cppss{17} & a \href{http://en.cppreference.com/w/cpp/concept/Mutex}{\ccode{Mutex}} that supports shared ownership semantics \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/SharedTimedMutex}{\ccode{SharedTimedMutex}} \cppss{14} & a \href{http://en.cppreference.com/w/cpp/concept/TimedMutex}{\ccode{TimedMutex}} that supports shared ownership semantics \\
+    \end{tabular*}
+    
+    \vspace*{3mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Stream I/O function concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/UnformattedInputFunction}{\ccode{UnformattedInputFunction}} & \myparbox{17.25cm}{a stream input function that does not skip leading whitespace and counts the processed characters} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/FormattedInputFunction}{\ccode{FormattedInputFunction}} & a stream input function that skips leading whitespace \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/UnformattedOutputFunction}{\ccode{UnformattedOutputFunction}} & a basic stream output function  \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/FormattedOutputFunction}{\ccode{FormattedOutputFunction}} & \myparbox{17.25cm}{a stream output function that sets failbit on errors and returns a reference to the stream} \\
+    \end{tabular*}
+    
+    \vspace*{3mm}
+    
+    \begin{tabular*}{\linewidth}{l  l}
+      \multicolumn{2}{l}{\ctblt{\href{http://en.cppreference.com/w/cpp/concept}{Random number generation concepts}}} \\ \hline
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/SeedSequence}{\ccode{SeedSequence}} \cppss{11} & \myparbox{15.1cm}{consumes a sequence of integers and produces a sequence of 32-bit unsigned values} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/UniformRandomBitGenerator}{\ccode{UniformRandomBitGenerator}} \cppss{11} & \myparbox{15.5cm}{returns uniformly distributed random unsigned integers} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/RandomNumberEngine}{\ccode{RandomNumberEngine}} \cppss{11} & \myparbox{15.1cm}{a deterministic \href{http://en.cppreference.com/w/cpp/concept/UniformRandomBitGenerator}{\ccode{UniformRandomBitGenerator}}, defined by the seed} \\
+      \rowcolor{coddrow}
+      \href{http://en.cppreference.com/w/cpp/concept/RandomNumberEngineAdaptor}{\ccode{RandomNumberEngineAdaptor}} \cppss{11} & \myparbox{15.3cm}{a \href{http://en.cppreference.com/w/cpp/concept/RandomNumberEngine}{\ccode{RandomNumberEngine}} that transforms the output of another \href{http://en.cppreference.com/w/cpp/concept/RandomNumberEngine}{\ccode{RandomNumberEngine}}} \\
+      % \rowcolor{white}
+      \href{http://en.cppreference.com/w/cpp/concept/RandomNumberDistribution}{\ccode{RandomNumberDistribution}} \cppss{11} & \myparbox{15.1cm}{returns random numbers distributed according to a given mathematical probability density function} \\
+    \end{tabular*}
+  \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{7}(89.9,80.7)
+  \begin{beamercolorbox}[center,ignorebg]{postit}
+    \begin{center}
+      \includegraphics[width=6cm]{./dwm_orange_base.eps}
+
+      \vspace*{2mm}
+      \mywt{\Larger{@mcplex.net}}
+    \end{center}
+  \end{beamercolorbox}
+\end{textblock}
+
+\begin{textblock}{19.2}(98.4,80.5)
+  \Larger{\mywt{\emph{``This pattern is common to all great programmers I know: they're not experts in something as much as experts in becoming experts in something.''}}}
+
+  \Larger{\mywt{\hfill -- Andrei Alexandrescu}}
+\end{textblock}
+
+% \begin{textblock}{121}(59.96,48.72)
+%   \begin{tikzpicture}[overlay,remember picture]
+%       \draw[fill opacity=0.15,rotate=30,shift={(0,0)}]
+%       node[scale=100,rotate=0] (52.96,48.72) {\textcolor{LeoniBlue}{\bf{\tt{C++}}}};
+%   \end{tikzpicture}
+% \end{textblock}
+
+\end{document}
